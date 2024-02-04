@@ -14,7 +14,14 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   }
 
   if (message?.input) {
-    text = body.untrustedData.inputText;
+    text = message.input;
+  }
+
+  if (message?.button === 2) {
+    return NextResponse.redirect(
+      'https://www.google.com/search?q=cute+dog+pictures&tbm=isch&source=lnms',
+      { status: 302 },
+    );
   }
 
   return new NextResponse(

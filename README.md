@@ -2,27 +2,25 @@
 
 Farcaster Frames in less than 100 lines, and ready to be deployed to Vercel.
 
+To test a Frame, use: https://warpcast.com/~/developers/frames.
+
+And let us know what you build by either mentioning @zizzamia on [Warpcast](https://warpcast.com/zizzamia) or [X](https://twitter.com/Zizzamia).
+
+<br />
+
 Have fun! ⛵️
-
-Put your Frame to the test at https://warpcast.com/~/developers/frames.
-
-Don't forget to share your love for A Frame in 100 Lines on https://warpcast.com/zizzamia or https://twitter.com/Zizzamia
 
 <br />
 
 ## App Routing files
 
 - app/
-  - redirect-frame/
-    - page.tsx
-  - config.ts
-  - layout.tsx
-  - page.tsx
+  - [config.ts](https://github.com/Zizzamia/a-frame-in-100-lines?tab=readme-ov-file#appconfigts)
+  - [layout.tsx](https://github.com/Zizzamia/a-frame-in-100-lines?tab=readme-ov-file#applayouttsx)
+  - [page.tsx](https://github.com/Zizzamia/a-frame-in-100-lines?tab=readme-ov-file#apppagetsx)
 - api/
   - frame/
-    - route.ts
-  - frame-redirect/
-    - route.ts
+    - [route.ts](https://github.com/Zizzamia/a-frame-in-100-lines?tab=readme-ov-file#appapiframeroutets)
 
 <br />
 
@@ -36,7 +34,11 @@ import { NEXT_PUBLIC_URL } from './config';
 const frameMetadata = getFrameMetadata({
   buttons: [
     {
-      label: 'Click Me',
+      label: 'Tell me the story',
+    },
+    {
+      label: 'Redirect to cute dog pictures',
+      action: 'post_redirect',
     },
   ],
   image: `${NEXT_PUBLIC_URL}/park-1.png`,
@@ -85,48 +87,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-### `app/layout.tsx`
+### `app/config.ts`
 ```ts
 export const NEXT_PUBLIC_URL = 'https://zizzamia.xyz';
-```
-
-### `app/redirect-frame/page.tsx`
-```tsx
-import { getFrameMetadata } from '@coinbase/onchainkit';
-import type { Metadata } from 'next';
-import { NEXT_PUBLIC_URL } from '../config';
-
-const frameMetadata = getFrameMetadata({
-  buttons: [
-    {
-      label: 'Redirect to cute dog pictures',
-      action: 'post_redirect',
-    },
-  ],
-  image: `${NEXT_PUBLIC_URL}/park-1.png`,
-  post_url: `${NEXT_PUBLIC_URL}/api/frame-redirect`,
-});
-
-export const metadata: Metadata = {
-  title: 'zizzamia.xyz',
-  description: 'LFG',
-  openGraph: {
-    title: 'zizzamia.xyz',
-    description: 'LFG',
-    images: [`${NEXT_PUBLIC_URL}/park-1.png`],
-  },
-  other: {
-    ...frameMetadata,
-  },
-};
-
-export default function Page() {
-  return (
-    <>
-      <h1>zizzamia.xyz</h1>
-    </>
-  );
-}
 ```
 
 ### `app/api/frame/route.ts`
@@ -134,8 +97,7 @@ export default function Page() {
 ```ts
 import { FrameRequest, getFrameMessage, getFrameHtmlResponse } from '@coinbase/onchainkit';
 import { NextRequest, NextResponse } from 'next/server';
-
-const NEXT_PUBLIC_URL = 'https://zizzamia.xyz';
+import { NEXT_PUBLIC_URL } from '../../config';
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   let accountAddress: string | undefined = '';
@@ -148,15 +110,22 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     accountAddress = message.interactor.verified_accounts[0];
   }
 
-  if (body?.untrustedData?.inputText) {
-    text = body.untrustedData.inputText;
+  if (message?.input) {
+    text = message.input;
+  }
+
+  if (message?.button === 2) {
+    return NextResponse.redirect(
+      'https://www.google.com/search?q=cute+dog+pictures&tbm=isch&source=lnms',
+      { status: 302 },
+    );
   }
 
   return new NextResponse(
     getFrameHtmlResponse({
       buttons: [
         {
-          label: `Text: ${text}`,
+          label: `🌲 Text: ${text}`,
         },
       ],
       image: `${NEXT_PUBLIC_URL}/park-2.png`,
@@ -172,30 +141,13 @@ export async function POST(req: NextRequest): Promise<Response> {
 export const dynamic = 'force-dynamic';
 ```
 
-### `app/api/frame-redirect/route.ts`
-
-```ts
-import { NextResponse } from 'next/server';
-
-async function getResponse(): Promise<NextResponse> {
-  return NextResponse.redirect(
-    'https://www.google.com/search?q=cute+dog+pictures&tbm=isch&source=lnms',
-    { status: 302 },
-  );
-}
-
-export async function POST(): Promise<Response> {
-  return getResponse();
-}
-
-export const dynamic = 'force-dynamic';
-```
-
 <br />
 
 ## Resources
 
-- [Official Farcaster Frames docs](https://warpcast.notion.site/Farcaster-Frames-4bd47fe97dc74a42a48d3a234636d8c5)
+- [Official Farcaster Frames documentation](https://docs.farcaster.xyz/learn/what-is-farcaster/frames)
+- [Official Farcaster Frame specification](https://docs.farcaster.xyz/reference/frames/spec)
+- [OnchainKit documentation](https://github.com/coinbase/onchainkit)
 
 <br />
 

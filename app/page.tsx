@@ -5,17 +5,11 @@ import { NEXT_PUBLIC_URL } from './config';
 const frameMetadata = getFrameMetadata({
   buttons: [
     {
-      label: 'Tell me the story',
-    },
-    {
-      label: 'Redirect to cute dog pictures',
+      label: 'Visit FuzeX',
       action: 'post_redirect',
     },
   ],
-  image: `${NEXT_PUBLIC_URL}/park-1.png`,
-  input: {
-    text: 'Tell me a boat story',
-  },
+  image: `https://purple-regulatory-iguana-790.mypinata.cloud/ipfs/QmToYdfQP5a9iE8RvTQdKAp2SnhqqTJL71nubYYeGBJTeZ`,
   post_url: `${NEXT_PUBLIC_URL}/api/frame`,
 });
 

@@ -14,12 +14,12 @@ const frameMetadata = getFrameMetadata({
 });
 
 export const metadata: Metadata = {
-  title: 'zizzamia.xyz',
-  description: 'LFG',
+  title: 'fuzex.io',
+  description: 'Activity platform that enables ticketing and membership',
   openGraph: {
-    title: 'zizzamia.xyz',
-    description: 'LFG',
-    images: [`${NEXT_PUBLIC_URL}/park-1.png`],
+    title: 'fuzex.io',
+    description: 'Activity platform that enables ticketing and membership',
+    images: [`https://purple-regulatory-iguana-790.mypinata.cloud/ipfs/QmToYdfQP5a9iE8RvTQdKAp2SnhqqTJL71nubYYeGBJTeZ`],
   },
   other: {
     ...frameMetadata,
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <h1>zizzamia.xyz</h1>
+      <h1>fuzex.io</h1>
     </>
   );
 }

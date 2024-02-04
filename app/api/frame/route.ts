@@ -13,13 +13,9 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     accountAddress = message.interactor.verified_accounts[0];
   }
 
-  if (message?.input) {
-    text = message.input;
-  }
-
-  if (message?.button === 2) {
+  if (message?.button === 1) {
     return NextResponse.redirect(
-      'https://www.google.com/search?q=cute+dog+pictures&tbm=isch&source=lnms',
+      'https://fuzex.io',
       { status: 302 },
     );
   }
@@ -28,10 +24,10 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     getFrameHtmlResponse({
       buttons: [
         {
-          label: `🌲 Text: ${text}`,
+          label: `🌲 Buy fuzex ticket now!`,
         },
       ],
-      image: `${NEXT_PUBLIC_URL}/park-2.png`,
+      image: `https://purple-regulatory-iguana-790.mypinata.cloud/ipfs/QmToYdfQP5a9iE8RvTQdKAp2SnhqqTJL71nubYYeGBJTeZ`,
       post_url: `${NEXT_PUBLIC_URL}/api/frame`,
     }),
   );
